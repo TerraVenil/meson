@@ -89,7 +89,7 @@ from .cpp import (
     C2000CPPCompiler,
     VisualStudioCPPCompiler,
 )
-from .cs import MonoCompiler, VisualStudioCsCompiler
+from .cs import MonoCompiler, VisualStudioCsCompiler, DotnetCompiler
 from .d import (
     DCompiler,
     DmdDCompiler,
@@ -166,7 +166,7 @@ if is_windows():
     # Clang and clang++ are valid, but currently unsupported.
     defaults['objc'] = ['cc', 'gcc']
     defaults['objcpp'] = ['c++', 'g++']
-    defaults['cs'] = ['csc', 'mcs']
+    defaults['cs'] = ['csc', 'mcs', 'dotnet']
 else:
     if platform.machine().lower() == 'e2k':
         defaults['c'] = ['cc', 'gcc', 'lcc', 'clang']
@@ -179,7 +179,7 @@ else:
         defaults['objc'] = ['cc', 'gcc', 'clang']
         defaults['objcpp'] = ['c++', 'g++', 'clang++']
     defaults['fortran'] = ['gfortran', 'flang', 'nvfortran', 'pgfortran', 'ifort', 'g95']
-    defaults['cs'] = ['mcs', 'csc']
+    defaults['cs'] = ['mcs', 'csc', 'dotnet']
 defaults['d'] = ['ldc2', 'ldc', 'gdc', 'dmd']
 defaults['java'] = ['javac']
 defaults['cuda'] = ['nvcc']
@@ -913,11 +913,13 @@ def detect_cs_compiler(env: 'Environment', for_machine: MachineChoice) -> Compil
             continue
 
         version = search_version(out)
-        cls: T.Union[T.Type[MonoCompiler], T.Type[VisualStudioCsCompiler]]
+        cls: T.Union[T.Type[MonoCompiler], T.Type[VisualStudioCsCompiler], T.Type[DotnetCompiler]]
         if 'Mono' in out:
             cls = MonoCompiler
         elif "Visual C#" in out:
             cls = VisualStudioCsCompiler
+        elif "dotnet" == comp[0]:
+            cls = DotnetCompiler
         else:
             continue
         env.coredata.add_lang_args(cls.language, cls, for_machine, env)
