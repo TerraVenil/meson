@@ -166,7 +166,7 @@ if is_windows():
     # Clang and clang++ are valid, but currently unsupported.
     defaults['objc'] = ['cc', 'gcc']
     defaults['objcpp'] = ['c++', 'g++']
-    defaults['cs'] = ['csc', 'mcs', 'dotnet']
+    defaults['cs'] = ['dotnet']
 else:
     if platform.machine().lower() == 'e2k':
         defaults['c'] = ['cc', 'gcc', 'lcc', 'clang']

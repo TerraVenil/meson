@@ -93,7 +93,7 @@ ENV_VAR_PROG_MAP: T.Mapping[str, str] = {
     # Compilers
     'c': 'CC',
     'cpp': 'CXX',
-    'cs': 'CSC',
+    'cs': 'dotnet',
     'd': 'DC',
     'fortran': 'FC',
     'objc': 'OBJC',

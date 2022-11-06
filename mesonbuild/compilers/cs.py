@@ -157,14 +157,16 @@ class DotnetCompiler(CsCompiler):
     def __init__(self, exelist: T.List[str], version: str, for_machine: MachineChoice,
                  info: 'MachineInfo'):
         output, _ = subprocess.Popen(exelist + ['--list-sdks'], stdout=PIPE, text=True).communicate()
-        sdk_path = [x.split(' ')[1].strip('[]') for x in output.strip().splitlines() if x.startswith(version)]
+        # sdk_path = [x.split(' ')[1].strip('[]') for x in output.strip().splitlines() if x.startswith(version)]
+        sdk_path = ["C:/Program Files/dotnet/sdk"]
+        # print(sdk_path)
         compiler_rel_path = [version, 'Roslyn', 'bincore', 'csc.dll']
         compiler_path = '/'.join(sdk_path + compiler_rel_path)
 
         exelist += [compiler_path]
         # Location specified here: https://github.com/dotnet/designs/blob/main/accepted/2019/targeting-packs-and-runtime-packs.md
         self.packs_path = '/'.join(sdk_path + ['..', 'packs'])
-        self.runtime_version = '6.0.0' # TODO:
+        self.runtime_version = '6.0.5' # TODO:
         self.framework_version = 'net6.0'
         super().__init__(exelist, version, for_machine, info, runner='dotnet')
 
